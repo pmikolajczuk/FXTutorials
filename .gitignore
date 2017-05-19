@@ -1,5 +1,8 @@
-#Hidden files and directories
-.*
+# IDEA #
+.idea/
+*.iml
+out/
+lib/
 
 # Compiled class file
 *.class
