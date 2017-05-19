@@ -10,6 +10,7 @@ import javafx.scene.effect.GaussianBlur;
 import javafx.scene.effect.Glow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -42,10 +43,29 @@ public class GameMenuDemo extends Application {
         imgView.setFitHeight(600);
 
         gameMenu = new GameMenu();
+        gameMenu.setVisible(false);
 
         root.getChildren().addAll(imgView, gameMenu);
 
         Scene scene = new Scene(root);
+        scene.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ESCAPE) {
+                if(!gameMenu.isVisible()){
+                    FadeTransition ft = new FadeTransition(Duration.seconds(0.5), gameMenu);
+                    ft.setFromValue(0);
+                    ft.setToValue(1);
+
+                    gameMenu.setVisible(true);
+                    ft.play();
+                }else{
+                    FadeTransition ft = new FadeTransition(Duration.seconds(0.5), gameMenu);
+                    ft.setFromValue(1);
+                    ft.setToValue(0);
+                    ft.setOnFinished(event1 -> gameMenu.setVisible(false));
+                    ft.play();
+                }
+            }
+        });
 
         primaryStage.setScene(scene);
         primaryStage.show();
