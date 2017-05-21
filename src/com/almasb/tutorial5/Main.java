@@ -3,6 +3,10 @@ package com.almasb.tutorial5;
 import javafx.application.Application;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -28,17 +32,21 @@ public class Main extends Application{
         dice2.setTranslateY(200);
 
         Button btn = new Button("New target");
-        btn.setOnAction(event -> {
-            target.set((int)(Math.random() * ((Dice.MAX_VALUE - Dice.MIN_VALUE) * 2 + 1)));
+        btn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                target.set((int) (Math.random() * ((Dice.MAX_VALUE - Dice.MIN_VALUE) * 2 + 1)));
+            }
         });
 
         btn.setTranslateX(400);
         btn.setTranslateY(200);
 
         SimpleBooleanProperty bool = new SimpleBooleanProperty();
+        bool.bind(target.isEqualTo(dice1.valueProperty.add(dice2.valueProperty)));
 
-        dice1.consumer = integer -> bool.set(dice1.valueProperty.getValue() + dice2.valueProperty.getValue() == target.getValue());
-        dice2.consumer = integer -> bool.set(dice1.valueProperty.getValue() + dice2.valueProperty.getValue() == target.getValue());
+        //dice1.diceRollListener = integer -> bool.set(integer + dice2.valueProperty.getValue() == target.getValue());
+        //dice2.diceRollListener = integer -> bool.set(dice1.valueProperty.getValue() + integer == target.getValue());
 
         Text message = new Text();
         message.textProperty().bind(target.asString().concat(" ").concat(bool.asString()));
