@@ -7,15 +7,18 @@ import javafx.scene.paint.Color;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Snake {
-    public static final Color COLOR = Color.CORNSILK;
+    //public static final Color COLOR = ;
 
     private Point head = new Point(10,10);
     private LinkedList<Point> tail = new LinkedList<>(Arrays.asList(new Point(9,10), new Point(9, 10),
             new Point(8, 10), new Point(7, 10), new Point(6, 10), new Point(5, 10)));
     private int velocity = 1;
-    private Direction direction = Direction.RIGHT;
+    private volatile Direction direction = Direction.RIGHT;
+    private boolean hasFood = false;
+    private boolean isDead = false;
 
     public enum Direction {
         UP,
@@ -44,20 +47,49 @@ public class Snake {
                 head = head.translate(velocity, 0);
                 break;
         }
+        checkCollision();
     }
 
     public void render(GraphicsContext gc) {
-        gc.setFill(COLOR);
         head.render(gc);
         tail.forEach(point -> point.render(gc));
+    }
+
+    public boolean checkFood(Food food){
+        if(head.equals(food.getPosition())){
+            //eat food
+            hasFood = true;
+            return true;
+        }
+        return false;
+    }
+
+    private void checkCollision(){
+        boolean result;
+
+        List<Point> collisions =  tail.stream().filter(point -> point.equals(head)).collect(Collectors.toList());
+
+        if(collisions.size() > 0) {
+            collisions.forEach(point -> point.setColor(Color.RED));
+            isDead = true;
+        }
+    }
+
+    private void updateTail(){
+        tail.addFirst(new Point(head.getX(), head.getY()));
+        if(hasFood) {
+            //skip removal of last element, snake will grow one element
+            hasFood = false;
+        }else{
+            tail.removeLast();
+        }
     }
 
     public void setDirection(Direction newDirection) {
         direction = newDirection;
     }
 
-    private void updateTail(){
-        tail.addFirst(new Point(head.getX(), head.getY()));
-        tail.removeLast();
+    public boolean isDead() {
+        return isDead;
     }
 }
