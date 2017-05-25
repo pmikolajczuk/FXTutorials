@@ -1,6 +1,6 @@
 package my.games.snake;
 
-import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -52,8 +52,10 @@ public class GameEngine {
         while (isRunning) {
             processTasks();
             if (!isPaused) {
-                updateGame();
-                displayGame();
+                Platform.runLater(() -> {
+                    updateGame();
+                    displayGame();
+                });
             }
 
             try {
@@ -68,7 +70,7 @@ public class GameEngine {
         grid.update();
         snake.update(apples);
 
-        while(apples.size() < applesDefaultNumber){
+        while (apples.size() < applesDefaultNumber) {
             apples.add(Apple.createNewApple());
         }
 
