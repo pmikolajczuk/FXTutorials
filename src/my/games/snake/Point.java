@@ -4,15 +4,14 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class Point {
-    public static final Color DEFAULT_COLOR = Color.CORNSILK;
     private final int x;
     private final int y;
     private Color color;
 
-    public Point(int x, int y) {
+    public Point(int x, int y, Color color) {
         this.x = x;
         this.y = y;
-        this.color = DEFAULT_COLOR;
+        this.color = color;
     }
 
     public int getX() {
@@ -32,7 +31,7 @@ public class Point {
     }
 
     public Point translate(int dx, int dy) {
-        return new Point(Math.floorMod(x + dx, Grid.WIDTH), Math.floorMod(y + dy, Grid.HEIGHT));
+        return new Point(Math.floorMod(x + dx, Grid.WIDTH), Math.floorMod(y + dy, Grid.HEIGHT), color);
     }
 
     public void render(GraphicsContext gc){
@@ -60,4 +59,6 @@ public class Point {
         result = 31 * result + y;
         return result;
     }
+
+
 }

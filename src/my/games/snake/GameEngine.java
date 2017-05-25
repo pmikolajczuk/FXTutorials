@@ -1,11 +1,13 @@
 package my.games.snake;
 
+import javafx.application.Application;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GameEngine {
@@ -17,37 +19,39 @@ public class GameEngine {
 
     private Grid grid;
     private Snake snake;
-    private Food food;
+    private List<Apple> apples;
+    private int applesDefaultNumber;
 
     private List<Runnable> tasks;
 
-    public GameEngine(Canvas canvas){
+    public GameEngine(Canvas canvas) {
         this.canvas = canvas;
         this.gc = canvas.getGraphicsContext2D();
         this.grid = new Grid();
         this.snake = new Snake();
-        this.food = new Food();
+        this.apples = new ArrayList(Arrays.asList(Apple.createNewApple(), Apple.createNewApple()));
+        this.applesDefaultNumber = apples.size();
 
         tasks = new ArrayList<>();
     }
 
-    public void startGame(){
+    public void startGame() {
         new Thread(() -> gameLoop()).start();
     }
 
-    public void finishGame(){
+    public void finishGame() {
         isRunning = false;
     }
 
-    public synchronized void addTask(Runnable runnable){
+    public synchronized void addTask(Runnable runnable) {
         tasks.add(runnable);
     }
 
     private void gameLoop() {
         isRunning = true;
-        while(isRunning){
+        while (isRunning) {
             processTasks();
-            if(!isPaused) {
+            if (!isPaused) {
                 updateGame();
                 displayGame();
             }
@@ -60,25 +64,26 @@ public class GameEngine {
         }
     }
 
-    private void updateGame(){
-        if(snake.checkFood(food)){
-            food = new Food();
+    private void updateGame() {
+        grid.update();
+        snake.update(apples);
+
+        while(apples.size() < applesDefaultNumber){
+            apples.add(Apple.createNewApple());
         }
 
-        grid.update();
-        snake.update();
-        if(snake.isDead()){
+        if (snake.isDead()) {
             isPaused = true;
         }
     }
 
-    private void displayGame(){
+    private void displayGame() {
         grid.render(gc);
-        food.render(gc);
+        apples.forEach(apple -> apple.render(gc));
         snake.render(gc);
     }
 
-    private synchronized void processTasks(){
+    private synchronized void processTasks() {
         tasks.forEach(runnable -> runnable.run());
         tasks.clear();
     }
@@ -87,15 +92,7 @@ public class GameEngine {
         if (event.getCode().isArrowKey()) {
             snake.setDirection(Snake.Direction.fromKeyCode(event.getCode()));
         } else if (event.getCode() == KeyCode.SPACE) {
-            setPaused(!isPaused());
+            isPaused = !isPaused;
         }
-    }
-
-    public boolean isPaused() {
-        return isPaused;
-    }
-
-    public void setPaused(boolean paused) {
-        isPaused = paused;
     }
 }
