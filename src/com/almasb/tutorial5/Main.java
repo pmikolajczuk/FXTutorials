@@ -32,11 +32,9 @@ public class Main extends Application{
         dice2.setTranslateY(200);
 
         Button btn = new Button("New target");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                target.set((int) (Math.random() * ((Dice.MAX_VALUE - Dice.MIN_VALUE) * 2 + 1)));
-            }
+
+        btn.setOnAction(event -> {
+            target.set((int)(Math.random() * (Dice.MAX_VALUE *2 - Dice.MIN_VALUE*2 + 1)) + Dice.MIN_VALUE*2);
         });
 
         btn.setTranslateX(400);
