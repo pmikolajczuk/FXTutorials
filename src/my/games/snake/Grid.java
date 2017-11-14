@@ -14,7 +14,7 @@ public class Grid {
 
 
     public void update() {
-        //TODO
+        //TODO: score etc.
     }
 
     public void render(GraphicsContext gc) {

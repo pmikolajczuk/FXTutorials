@@ -5,34 +5,42 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class GameEngine {
+
+    public static final int NO_OF_CMP_SNAKES = 7;
+    public static final int NO_OF_APPLES = 1;
 
     private Canvas canvas;
     private GraphicsContext gc;
     private volatile boolean isRunning = false;
     private volatile boolean isPaused = false;
 
-    private Grid grid;
-    private Snake snake;
-    private List<Apple> apples;
-    private int applesDefaultNumber;
+    private Grid grid = new Grid();
+    private List<Snake> snakes = new ArrayList<>();
+    private List<Apple> apples = new ArrayList<>();
 
-    private List<Runnable> tasks;
+    private List<Runnable> tasks = new ArrayList<>();
 
     public GameEngine(Canvas canvas) {
         this.canvas = canvas;
         this.gc = canvas.getGraphicsContext2D();
-        this.grid = new Grid();
-        this.snake = new Snake();
-        this.apples = new ArrayList(Arrays.asList(Apple.createNewApple(), Apple.createNewApple()));
-        this.applesDefaultNumber = apples.size();
 
-        tasks = new ArrayList<>();
+        this.snakes.add(new BaseSnake(10, 20, Color.CORNSILK));
+
+        int rows = 4;
+        for (int i = 0; i < NO_OF_CMP_SNAKES; i++) {
+            this.snakes.add(new CmpSnake((i % rows + 1) * 8, (i / rows + 1) * 5,
+                    new Color(Math.random(), Math.random(), Math.random(), 1)));
+        }
+
+        for (int i = 0; i < NO_OF_APPLES; i++) {
+            this.apples.add(Apple.createNewApple());
+        }
     }
 
     public void startGame() {
@@ -53,6 +61,7 @@ public class GameEngine {
             processTasks();
             if (!isPaused) {
                 Platform.runLater(() -> {
+                    //if(isPaused) {return};
                     updateGame();
                     displayGame();
                 });
@@ -68,13 +77,20 @@ public class GameEngine {
 
     private void updateGame() {
         grid.update();
-        snake.update(apples);
 
-        while (apples.size() < applesDefaultNumber) {
+        List<Point> obstacles = new ArrayList<>();
+
+        snakes.forEach(snake -> {
+            obstacles.addAll(snake.getBody());
+        });
+
+        snakes.stream().filter(snake -> !snake.isDead()).forEach(snake -> snake.update(apples, obstacles));
+
+        while (apples.size() < NO_OF_APPLES) {
             apples.add(Apple.createNewApple());
         }
 
-        if (snake.isDead()) {
+        if (snakes.stream().allMatch(snake -> snake.isDead())) {
             isPaused = true;
         }
     }
@@ -82,7 +98,7 @@ public class GameEngine {
     private void displayGame() {
         grid.render(gc);
         apples.forEach(apple -> apple.render(gc));
-        snake.render(gc);
+        snakes.forEach(snake -> snake.render(gc));
     }
 
     private synchronized void processTasks() {
@@ -92,7 +108,8 @@ public class GameEngine {
 
     public void processInput(KeyEvent event) {
         if (event.getCode().isArrowKey()) {
-            snake.setDirection(Snake.Direction.fromKeyCode(event.getCode()));
+            snakes.stream().filter(snake -> snake instanceof BaseSnake).
+                    forEach(snake -> snake.setDirection(Snake.Direction.fromKeyCode(event.getCode())));
         } else if (event.getCode() == KeyCode.SPACE) {
             isPaused = !isPaused;
         }

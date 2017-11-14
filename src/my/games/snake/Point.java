@@ -39,6 +39,10 @@ public class Point {
         gc.fillRect(x*Grid.POINT_SIZE, y*Grid.POINT_SIZE, Grid.POINT_SIZE, Grid.POINT_SIZE);
     }
 
+    public int distance(Point point){
+       return Math.abs(point.x - this.x) + Math.abs(point.y - this.y);
+    }
+
     @Override
     public boolean equals(Object o){
         if (this == o) {
