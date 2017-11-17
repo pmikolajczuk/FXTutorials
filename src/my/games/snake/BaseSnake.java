@@ -30,13 +30,13 @@ public class BaseSnake implements Snake {
         if (checkCollision(obstacles)) {
             isDead = true;
             return;
-        }
+    }
 
         boolean isAppleEaten = checkAndEatApples(apples);
         updateTail(isAppleEaten);
 
         Point newHead = calculateNewHead(head, direction);
-        obstacles.remove(head);
+        //obstacles.removeIf(point -> point == head);
         obstacles.add(newHead);
         head = newHead;
     }
@@ -49,9 +49,10 @@ public class BaseSnake implements Snake {
 
     @Override
     public void setDirection(Direction newDirection) {
-        if(! newDirection.isOpposite(direction)){
-            direction = newDirection;
-        }
+//        if (newDirection.isOpposite(direction)) {
+//            return;
+//        }
+        direction = newDirection;
     }
 
     @Override

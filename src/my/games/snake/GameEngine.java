@@ -12,8 +12,8 @@ import java.util.List;
 
 public class GameEngine {
 
-    public static final int NO_OF_CMP_SNAKES = 7;
-    public static final int NO_OF_APPLES = 1;
+    public static final int NO_OF_CMP_SNAKES = 1;
+    public static final int NO_OF_APPLES = 2;
 
     private Canvas canvas;
     private GraphicsContext gc;
@@ -30,11 +30,11 @@ public class GameEngine {
         this.canvas = canvas;
         this.gc = canvas.getGraphicsContext2D();
 
-        this.snakes.add(new BaseSnake(10, 20, Color.CORNSILK));
+        //this.snakes.add(new BaseSnake(10, 20, Color.CORNSILK));
 
         int rows = 4;
         for (int i = 0; i < NO_OF_CMP_SNAKES; i++) {
-            this.snakes.add(new CmpSnake((i % rows + 1) * 8, (i / rows + 1) * 5,
+            this.snakes.add(new CmpSnake((i % rows + 1) * 8, (i / rows + 1) * 6,
                     new Color(Math.random(), Math.random(), Math.random(), 1)));
         }
 
@@ -87,7 +87,7 @@ public class GameEngine {
         snakes.stream().filter(snake -> !snake.isDead()).forEach(snake -> snake.update(apples, obstacles));
 
         while (apples.size() < NO_OF_APPLES) {
-            apples.add(Apple.createNewApple());
+            apples.add(Apple.createNewApple(obstacles));
         }
 
         if (snakes.stream().allMatch(snake -> snake.isDead())) {

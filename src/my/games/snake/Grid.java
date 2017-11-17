@@ -5,8 +5,8 @@ import javafx.scene.paint.Color;
 
 public class Grid {
     public static final Color COLOR = Color.BLACK;
-    public static final int PIXEL_WIDTH = 800;
-    public static final int PIXEL_HEIGHT = 600;
+    public static final int PIXEL_WIDTH = 400;
+    public static final int PIXEL_HEIGHT = 300;
     public static final int POINT_SIZE = 20;
     public static final int WIDTH = PIXEL_WIDTH / POINT_SIZE;
     public static final int HEIGHT = PIXEL_HEIGHT / POINT_SIZE;

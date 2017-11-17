@@ -8,6 +8,13 @@ public class Point {
     private final int y;
     private Color color;
 
+
+    public Point(int x, int y){
+        this.x = x;
+        this.y = y;
+        this.color = null;
+    }
+
     public Point(int x, int y, Color color) {
         this.x = x;
         this.y = y;

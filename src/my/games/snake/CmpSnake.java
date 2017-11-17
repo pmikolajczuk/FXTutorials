@@ -14,7 +14,7 @@ public class CmpSnake implements Snake {
     }
 
     public void update(List<Apple> apples, List<Point> obstacles) {
-        snake.setDirection(calculateNewDirection(apples, obstacles));
+        snake.setDirection(calculateNextDirection(apples, obstacles));
         snake.update(apples, obstacles);
     }
 
@@ -35,7 +35,44 @@ public class CmpSnake implements Snake {
         return snake.getBody();
     }
 
-    private BaseSnake.Direction calculateNewDirection(List<Apple> apples, List<Point> obstacles) {
+    private BaseSnake.Direction calculateNextDirection(List<Apple> apples, List<Point> obstacles) {
+        Apple nearestApple = findNearestApple(apples);
+        BaseSnake.Direction nextDirection = snake.direction;
+
+        //check if there are any apples
+//        if (nearestApple != null) {
+//            if (nearestApple.getX() - snake.head.getX() > 0) {
+//                nextDirection = BaseSnake.Direction.RIGHT;
+//            } else if (nearestApple.getX() - snake.head.getX() < 0) {
+//                nextDirection = BaseSnake.Direction.LEFT;
+//            } else if (nearestApple.getY() - snake.head.getY() > 0) {
+//                nextDirection = BaseSnake.Direction.DOWN;
+//            } else if (nearestApple.getY() - snake.head.getY() < 0) {
+//                nextDirection = BaseSnake.Direction.UP;
+//            }
+//        }
+//        nextDirection = avoidCollision(nextDirection, obstacles);
+
+
+        Point nextPoint = calculateNextPosition(snake.head, nearestApple, obstacles);
+        if (nextPoint != null) {
+            if (nextPoint.getX() - snake.head.getX() > 0) {
+                nextDirection = BaseSnake.Direction.RIGHT;
+            } else if (nextPoint.getX() - snake.head.getX() < 0) {
+                nextDirection = BaseSnake.Direction.LEFT;
+            } else if (nextPoint.getY() - snake.head.getY() > 0) {
+                nextDirection = BaseSnake.Direction.DOWN;
+            } else if (nextPoint.getY() - snake.head.getY() < 0) {
+                nextDirection = BaseSnake.Direction.UP;
+            }
+        } else {
+            nextDirection = avoidCollision(nextDirection, obstacles);
+        }
+
+        return nextDirection;
+    }
+
+    private Apple findNearestApple(List<Apple> apples) {
         Apple nearestApple = null;
         int distanceToApple = Integer.MAX_VALUE;
         for (Apple apple : apples) {
@@ -45,37 +82,58 @@ public class CmpSnake implements Snake {
                 distanceToApple = newDistance;
             }
         }
+        return nearestApple;
+    }
 
-        BaseSnake.Direction nextDirection = snake.direction;
+    private Point calculateNextPosition(Point currentPosition, Point dest, List<Point> obstacles) {
+        if (isColliding(currentPosition, obstacles)) {
+            return null;
+        }
 
-        //check if there are any apples
-        if (nearestApple != null) {
-            if (nearestApple.getX() - snake.head.getX() > 0) {
-                nextDirection = BaseSnake.Direction.RIGHT;
-            } else if (nearestApple.getX() - snake.head.getX() < 0) {
-                nextDirection = BaseSnake.Direction.LEFT;
-            } else if (nearestApple.getY() - snake.head.getY() > 0) {
-                nextDirection = BaseSnake.Direction.DOWN;
-            } else if (nearestApple.getY() - snake.head.getY() < 0) {
-                nextDirection = BaseSnake.Direction.UP;
+        if (currentPosition.equals(dest)) {
+            return currentPosition;
+        }
+
+        Point nextPosition;
+        if (dest.getX() - currentPosition.getX() > 0) {
+            nextPosition = new Point(currentPosition.getX() + 1, currentPosition.getY());
+            if (calculateNextPosition(nextPosition, dest, obstacles) != null) {
+                return nextPosition;
+            }
+        }
+        if (dest.getX() - currentPosition.getX() < 0) {
+            nextPosition = new Point(currentPosition.getX() - 1, currentPosition.getY());
+            if (calculateNextPosition(nextPosition, dest, obstacles) != null) {
+                return nextPosition;
+            }
+
+        }
+        if (dest.getY() - currentPosition.getY() > 0) {
+            nextPosition = new Point(currentPosition.getX(), currentPosition.getY() + 1);
+            if (calculateNextPosition(nextPosition, dest, obstacles) != null) {
+                return nextPosition;
+            }
+        }
+        if (dest.getY() - currentPosition.getY() < 0) {
+            nextPosition = new Point(currentPosition.getX(), currentPosition.getY() - 1);
+            if (calculateNextPosition(nextPosition, dest, obstacles) != null) {
+                return nextPosition;
             }
         }
 
-        nextDirection = avoidCollision(nextDirection, obstacles);
-
-        return nextDirection;
+        return calculateNextPosition(currentPosition, dest, obstacles);
     }
 
     private BaseSnake.Direction avoidCollision(BaseSnake.Direction nextDirection, List<Point> obstacles) {
         Point nextHead = snake.calculateNewHead(snake.head, nextDirection);
 
-        if (checkCollision(nextHead, obstacles)) {
+        if (isColliding(nextHead, obstacles)) {
             int nextDirectionOrdinal = (nextDirection.ordinal() + 1) % 4;
             nextDirection = BaseSnake.Direction.values()[nextDirectionOrdinal];
             try {
                 nextDirection = avoidCollision(nextDirection, obstacles);
             } catch (StackOverflowError e) {
-                //if stack overflow then cmp lost
+                //if stack overflow then stop recursion - there is no way out
                 return nextDirection;
             }
         }
@@ -83,9 +141,9 @@ public class CmpSnake implements Snake {
         return nextDirection;
     }
 
-    private boolean checkCollision(Point point, List<Point> obstacle) {
-        for (int i = 0; i < obstacle.size(); i++) {
-            if (point.equals(obstacle.get(i))) {
+    private boolean isColliding(Point point, List<Point> obstacles) {
+        for (int i = 0; i < obstacles.size(); i++) {
+            if (point.equals(obstacles.get(i)) && point != obstacles.get(i)) {
                 return true;
             }
         }
