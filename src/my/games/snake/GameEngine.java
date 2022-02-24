@@ -58,7 +58,7 @@ public class GameEngine {
     private void gameLoop() {
         isRunning = true;
         while (isRunning) {
-            processTasks();
+            //processTasks();
             if (!isPaused) {
                 Platform.runLater(() -> {
                     //if(isPaused) {return};
