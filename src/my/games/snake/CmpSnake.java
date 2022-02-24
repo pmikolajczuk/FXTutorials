@@ -39,21 +39,6 @@ public class CmpSnake implements Snake {
         Apple nearestApple = findNearestApple(apples);
         BaseSnake.Direction nextDirection = snake.direction;
 
-        //check if there are any apples
-//        if (nearestApple != null) {
-//            if (nearestApple.getX() - snake.head.getX() > 0) {
-//                nextDirection = BaseSnake.Direction.RIGHT;
-//            } else if (nearestApple.getX() - snake.head.getX() < 0) {
-//                nextDirection = BaseSnake.Direction.LEFT;
-//            } else if (nearestApple.getY() - snake.head.getY() > 0) {
-//                nextDirection = BaseSnake.Direction.DOWN;
-//            } else if (nearestApple.getY() - snake.head.getY() < 0) {
-//                nextDirection = BaseSnake.Direction.UP;
-//            }
-//        }
-//        nextDirection = avoidCollision(nextDirection, obstacles);
-
-
         Point nextPoint = calculateNextPosition(snake.head, nearestApple, obstacles);
         if (nextPoint != null) {
             if (nextPoint.getX() - snake.head.getX() > 0) {
@@ -121,7 +106,8 @@ public class CmpSnake implements Snake {
             }
         }
 
-        return calculateNextPosition(currentPosition, dest, obstacles);
+        //return calculateNextPosition(currentPosition, dest, obstacles);
+        return null;
     }
 
     private BaseSnake.Direction avoidCollision(BaseSnake.Direction nextDirection, List<Point> obstacles) {
