@@ -68,7 +68,7 @@ public class GameEngine {
             }
 
             try {
-                Thread.sleep(100);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -76,15 +76,15 @@ public class GameEngine {
     }
 
     private void updateGame() {
-        grid.update();
-
         List<Point> obstacles = new ArrayList<>();
 
         snakes.forEach(snake -> {
             obstacles.addAll(snake.getBody());
         });
 
-        snakes.stream().filter(snake -> !snake.isDead()).forEach(snake -> snake.update(apples, obstacles));
+        snakes.stream()
+                .filter(snake -> !snake.isDead())
+                .forEach(snake -> snake.update(apples, obstacles));
 
         while (apples.size() < NO_OF_APPLES) {
             apples.add(Apple.createNewApple(obstacles));
@@ -93,6 +93,7 @@ public class GameEngine {
         if (snakes.stream().allMatch(snake -> snake.isDead())) {
             isPaused = true;
         }
+        grid.updateScore(snakes);
     }
 
     private void displayGame() {

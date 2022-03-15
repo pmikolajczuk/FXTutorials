@@ -3,6 +3,7 @@ package my.games.snake;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -12,16 +13,11 @@ public class BaseSnake implements Snake {
     LinkedList<Point> tail;
     int velocity = 1;
     volatile Direction direction = Direction.RIGHT;
-    boolean hasFood = false;
     boolean isDead = false;
-
-    public BaseSnake(int startX, int startY) {
-        this(startX, startY, Color.CORNSILK);
-    }
 
     public BaseSnake(int startX, int startY, Color color) {
         head = new Point(startX, startY, color);
-        tail = createTail(4, color);
+        tail = createTail(Snake.START_LENGTH - 1, color);
     }
 
     @Override
@@ -36,7 +32,6 @@ public class BaseSnake implements Snake {
         updateTail(isAppleEaten);
 
         Point newHead = calculateNewHead(head, direction);
-        //obstacles.removeIf(point -> point == head);
         obstacles.add(newHead);
         head = newHead;
     }
@@ -87,7 +82,11 @@ public class BaseSnake implements Snake {
     }
 
     private boolean checkAndEatApples(List<Apple> apples) {
-        List<Apple> eatenApples = apples.stream().filter(apple -> apple.equals(head)).collect(Collectors.toList());
+        List<Apple> eatenApples =
+                apples.stream()
+                        .filter(apple -> apple.equals(head))
+                        .collect(Collectors.toList());
+
         if (eatenApples.size() > 0) {
             apples.removeAll(eatenApples);
             return true;
