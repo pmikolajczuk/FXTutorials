@@ -12,7 +12,7 @@ import java.util.List;
 
 public class GameEngine {
 
-    public static final int NO_OF_CMP_SNAKES = 1;
+    public static final int NO_OF_CMP_SNAKES = 2;
     public static final int NO_OF_APPLES = 2;
 
     private Canvas canvas;
@@ -68,7 +68,7 @@ public class GameEngine {
             }
 
             try {
-                Thread.sleep(50);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

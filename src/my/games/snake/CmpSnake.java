@@ -84,6 +84,10 @@ public class CmpSnake implements Snake {
     }
 
     private Point calculateNextPosition(Point currentPosition, Point dest, List<Point> obstacles) {
+        if(dest == null) {
+            return null;
+        }
+
         if (isColliding(currentPosition, obstacles)) {
             return null;
         }

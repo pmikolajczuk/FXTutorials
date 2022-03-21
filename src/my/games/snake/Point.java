@@ -43,7 +43,7 @@ public class Point {
 
     public void render(GraphicsContext gc){
         gc.setFill(color);
-        gc.fillRect(x*Grid.POINT_SIZE, y*Grid.POINT_SIZE, Grid.POINT_SIZE, Grid.POINT_SIZE);
+        gc.fillRect(x*Grid.POINT_SIZE, y*Grid.POINT_SIZE + Grid.SCORE_PIXEL_HEIGHT, Grid.POINT_SIZE, Grid.POINT_SIZE);
     }
 
     public int distance(Point point){

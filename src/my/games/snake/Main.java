@@ -23,7 +23,7 @@ public class Main extends Application {
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
 
-        canvas = new Canvas(Grid.PIXEL_WIDTH, Grid.PIXEL_HEIGHT);
+        canvas = new Canvas(Grid.PIXEL_WIDTH, Grid.PIXEL_HEIGHT + Grid.SCORE_PIXEL_HEIGHT);
         canvas.setFocusTraversable(true);
 
         root.getChildren().add(canvas);
