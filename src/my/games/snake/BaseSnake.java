@@ -62,6 +62,11 @@ public class BaseSnake implements Snake {
         return body;
     }
 
+    @Override
+    public Color getColor() {
+        return head.getColor();
+    }
+
     protected Point calculateNewHead(Point currentHead, Direction direction) {
         Point newHead = null;
         switch (direction) {

@@ -2,6 +2,7 @@ package my.games.snake;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
 
 import java.util.List;
 
@@ -17,6 +18,8 @@ public interface Snake {
     boolean isDead();
 
     List<Point> getBody();
+
+    Color getColor();
 
     default int getScore() {
         return getBody().size() - START_LENGTH;

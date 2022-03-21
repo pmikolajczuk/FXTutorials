@@ -17,12 +17,12 @@ public class Grid {
     public static final int SCORE_PIXEL_HEIGHT = 100;
     public static final int SCORE_HEIGHT = SCORE_PIXEL_HEIGHT / POINT_SIZE;
 
-    List<Integer> scores = new ArrayList<>();
+    List<Score> scores = new ArrayList<>();
 
     public void updateScore(List<Snake> snakes) {
         this.scores.clear();
         for(Snake snake : snakes) {
-            this.scores.add(snake.getScore());
+            this.scores.add(new Score(snake.getScore(), snake.getColor()));
         }
 
     }
@@ -45,8 +45,9 @@ public class Grid {
         int i = 1;
         int x = 0;
         int y = 1;
-        for(Integer score : scores) {
-            gc.strokeText("Snake " + i + ": " + score, x * 100, y * POINT_SIZE);
+        for(Score score : scores) {
+            gc.setStroke(score.getColor());
+            gc.strokeText("Snake " + i + ": " + score.getScore(), x * 100, y * POINT_SIZE);
             i++;
             y++;
             if(y == 5) {

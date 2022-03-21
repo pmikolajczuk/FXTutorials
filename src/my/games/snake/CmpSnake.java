@@ -29,13 +29,21 @@ public class CmpSnake implements Snake {
         throw new RuntimeException("NOT IMPLEMENTED");
     }
 
+    @Override
     public boolean isDead() {
         return snake.isDead();
     }
 
+    @Override
     public List<Point> getBody() {
         return snake.getBody();
     }
+
+    @Override
+    public Color getColor() {
+        return snake.getColor();
+    }
+
 
     private BaseSnake.Direction calculateNextDirection(BaseSnake.Direction currentDirection, List<Apple> apples, List<Point> obstacles) {
         Snake.Direction nextDirection = Optional
