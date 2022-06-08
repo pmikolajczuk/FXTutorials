@@ -109,8 +109,9 @@ public class GameEngine {
 
     public void processInput(KeyEvent event) {
         if (event.getCode().isArrowKey()) {
-            snakes.stream().filter(snake -> snake instanceof BaseSnake).
-                    forEach(snake -> snake.setDirection(Snake.Direction.fromKeyCode(event.getCode())));
+            snakes.stream()
+                    .filter(snake -> snake instanceof BaseSnake)
+                    .forEach(snake -> snake.setDirection(Snake.Direction.fromKeyCode(event.getCode())));
         } else if (event.getCode() == KeyCode.SPACE) {
             isPaused = !isPaused;
         }
