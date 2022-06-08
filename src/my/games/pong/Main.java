@@ -14,7 +14,7 @@ public class Main extends Application{
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.setTitle("Snake game !");
+        primaryStage.setTitle("Pong game!");
 
         StackPane root = new StackPane();
         Scene scene = new Scene(root);

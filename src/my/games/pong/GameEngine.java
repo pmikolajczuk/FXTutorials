@@ -10,11 +10,12 @@ public class GameEngine {
     private GraphicsContext gc;
     private volatile boolean isRunning = false;
 
+    private Score score = new Score();
     private Grid grid = new Grid();
-    private Ball ball = new Ball(100, 100);
-
+    private Ball ball = new Ball(Grid.WIDTH / 2, Grid.HEIGHT / 2);
     private Paddle paddle1 = new Paddle(0,Grid.HEIGHT / 2);
-    private Paddle paddle2 = new Paddle(Grid.WIDTH - Paddle.WIDTH, Grid.HEIGHT / 2);
+    //private Paddle paddle2 = new Paddle(Grid.WIDTH - Paddle.WIDTH, Grid.HEIGHT / 2);
+    private Paddle paddle2 = new Paddle(Grid.WIDTH - Paddle.WIDTH, 390);
 
     public GameEngine(Canvas canvas) {
         this.canvas = canvas;
@@ -39,7 +40,9 @@ public class GameEngine {
     private void updateGame() {
         paddle1.move();
         paddle2.move();
-        ball.move(paddle1, paddle2);
+        if(ball.move(paddle1, paddle2, score)) {
+            ball = new Ball(Grid.WIDTH / 2, Grid.HEIGHT / 2);
+        };
     }
 
     private void displayGame() {
