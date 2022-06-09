@@ -44,9 +44,9 @@ public class Main extends Application{
     private void handleKeyPressedEvent(KeyEvent event) {
         if(event.getCode() == KeyCode.ENTER){
             restart();
+        } else {
+            engine.handleKeyPressedEvent(event);
         }
-        //else
-        engine.handleKeyPressedEvent(event);
     }
 
     private void restart(){
