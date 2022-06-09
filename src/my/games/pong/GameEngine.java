@@ -9,13 +9,14 @@ public class GameEngine {
     private Canvas canvas;
     private GraphicsContext gc;
     private volatile boolean isRunning = false;
+    private volatile boolean isPaused = false;
 
     private Score score = new Score();
     private Grid grid = new Grid();
     private Ball ball = new Ball(Grid.WIDTH / 2, Grid.HEIGHT / 2);
-    private Paddle paddle1 = new Paddle(0,Grid.HEIGHT / 2);
-    //private Paddle paddle2 = new Paddle(Grid.WIDTH - Paddle.WIDTH, Grid.HEIGHT / 2);
-    private Paddle paddle2 = new Paddle(Grid.WIDTH - Paddle.WIDTH, 390);
+    //private Paddle paddle1 = new Paddle(0,Grid.HEIGHT / 2);
+    private Paddle paddle1 = new CmpPaddle(0,Grid.HEIGHT / 2);
+    private Paddle paddle2 = new Paddle(Grid.WIDTH - Paddle.WIDTH, Grid.HEIGHT / 2);
 
     public GameEngine(Canvas canvas) {
         this.canvas = canvas;
@@ -24,10 +25,12 @@ public class GameEngine {
 
     public void gameLoop() {
         while (isRunning) {
-            Platform.runLater(() -> {
-                updateGame();
-                displayGame();
-            });
+            if(!isPaused) {
+                Platform.runLater(() -> {
+                    updateGame();
+                    displayGame();
+                });
+            }
 
             try {
                 Thread.sleep(5);
@@ -38,8 +41,8 @@ public class GameEngine {
     }
 
     private void updateGame() {
-        paddle1.move();
-        paddle2.move();
+        paddle1.move(ball);
+        paddle2.move(ball);
         if(ball.move(paddle1, paddle2, score)) {
             ball = new Ball(Grid.WIDTH / 2, Grid.HEIGHT / 2);
         };
@@ -47,6 +50,7 @@ public class GameEngine {
 
     private void displayGame() {
         grid.render(gc);
+        score.render(gc);
         paddle1.render(gc);
         paddle2.render(gc);
         ball.render(gc);
@@ -75,6 +79,9 @@ public class GameEngine {
             case DOWN:
                 paddle2.setDirection(Paddle.Direction.DOWN);
                 break;
+            case SPACE:
+                isPaused = !isPaused;
+                break;
         }
     }
 
@@ -87,6 +94,7 @@ public class GameEngine {
             case UP:
             case DOWN:
                 paddle2.setDirection(Paddle.Direction.NONE);
+                break;
         }
     }
 }

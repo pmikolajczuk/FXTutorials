@@ -10,10 +10,10 @@ public class Paddle {
     public static final int HEIGHT = 100;
     public static final int WIDTH = 20;
 
-    private int posX;
-    private int posY;
-    private int speedY = 2;
-    private Direction direction = NONE;
+    protected int posX;
+    protected int posY;
+    protected int speedY = 2;
+    protected Direction direction = NONE;
 
     public Paddle(int posX, int posY) {
         this.posX = posX;
@@ -36,7 +36,7 @@ public class Paddle {
         this.direction = direction;
     }
 
-    public void move() {
+    public void move(Ball ball) {
         switch (direction) {
             case UP:
                 posY -= speedY;
@@ -45,7 +45,6 @@ public class Paddle {
                 posY += speedY;
                 break;
         }
-        //direction = NONE;
     }
 
     public void render(GraphicsContext gc) {
