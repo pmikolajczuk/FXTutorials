@@ -12,7 +12,7 @@ public class Paddle {
 
     protected int posX;
     protected int posY;
-    protected int speedY = 2;
+    protected int speedY = 1;
     protected Direction direction = NONE;
 
     public Paddle(int posX, int posY) {
@@ -39,10 +39,10 @@ public class Paddle {
     public void move(Ball ball) {
         switch (direction) {
             case UP:
-                posY -= speedY;
+                posY = Math.max(0, posY -  speedY);
                 break;
             case DOWN:
-                posY += speedY;
+                posY = Math.min(Grid.HEIGHT - Paddle.HEIGHT, posY + speedY);
                 break;
         }
     }

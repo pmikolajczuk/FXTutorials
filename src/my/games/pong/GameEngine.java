@@ -41,6 +41,10 @@ public class GameEngine {
     }
 
     private void updateGame() {
+        if(score.isGameFinished()) {
+            stopGame();
+        }
+
         paddle1.move(ball);
         paddle2.move(ball);
         if(ball.move(paddle1, paddle2, score)) {
@@ -53,7 +57,12 @@ public class GameEngine {
         score.render(gc);
         paddle1.render(gc);
         paddle2.render(gc);
-        ball.render(gc);
+
+        if(score.isGameFinished()) {
+            score.renderWinner(gc);
+        }else {
+            ball.render(gc);
+        }
     }
 
     public void startGame() {
@@ -61,7 +70,7 @@ public class GameEngine {
         new Thread(() -> gameLoop()).start();
     }
 
-    public void finishGame() {
+    public void stopGame() {
         isRunning = false;
     }
 

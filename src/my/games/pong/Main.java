@@ -26,7 +26,7 @@ public class Main extends Application{
         root.getChildren().add(canvas);
         engine = new GameEngine(canvas);
 
-        primaryStage.setOnCloseRequest(event -> engine.finishGame());
+        primaryStage.setOnCloseRequest(event -> engine.stopGame());
         primaryStage.show();
         initializeControls();
         engine.startGame();
@@ -51,7 +51,7 @@ public class Main extends Application{
 
     private void restart(){
         //restart
-        engine.finishGame();
+        engine.stopGame();
         engine = new GameEngine(canvas);
         engine.startGame();
     }
