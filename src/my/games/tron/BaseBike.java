@@ -7,38 +7,42 @@ import javafx.scene.paint.Color;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Bike {
+public class BaseBike {
     private Color color;
     private int posX;
     private int posY;
     private int speed = 1;
     private List<Point> trail = new LinkedList<>();
-    private Direction direction;
+    private PlayerBike.Direction direction;
     private boolean isDead = false;
 
-    public Bike(int posX, int posY, Color color, Direction direction) {
+    public BaseBike(int posX, int posY, Color color, PlayerBike.Direction direction) {
         this.posX = posX;
         this.posY = posY;
         this.color = color;
         this.direction = direction;
     }
 
+    public List<Point> getTrail () {
+        return trail;
+    }
+
     public boolean isDead() {
         return isDead;
     }
 
-    public void setDirection(Direction direction) {
+    public void setDirection(PlayerBike.Direction direction) {
         this.direction = direction;
     }
 
     public void render(GraphicsContext gc) {
         gc.setFill(color);
         trail.forEach(point -> point.render(gc));
-        gc.fillRect(posX, posY, 1,1);
+        gc.fillRect(posX, posY, 1, 1);
     }
 
-    public void update() {
-        if(isDead) {
+    public void update(List<Point> allTrails) {
+        if (isDead) {
             return;
         }
 
@@ -56,19 +60,21 @@ public class Bike {
             case RIGHT:
                 posX += speed;
                 break;
-
         }
-        checkCollision();
+        checkCollision(allTrails);
     }
 
-    public void checkCollision() {
-        if(trail.contains(new Point(posX, posY))) {
+    public void checkCollision(List<Point> allTrails) {
+        if (posX == 0 || posX == Grid.WIDTH || posY == 0 || posY == Grid.HEIGHT) {
+            isDead = true;
+        } else if (allTrails.contains(new Point(posX, posY))) {
             isDead = true;
         }
     }
 
     public enum Direction {
         UP, DOWN, LEFT, RIGHT;
+
         public static Direction fromKeyCode(KeyCode keyCode) {
             return Direction.valueOf(keyCode.name());
         }

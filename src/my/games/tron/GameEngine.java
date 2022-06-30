@@ -9,6 +9,7 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GameEngine {
     private Canvas canvas;
@@ -17,14 +18,16 @@ public class GameEngine {
     private volatile boolean isPaused = false;
 
     private Grid grid = new Grid();
-    private Bike bike1 = new Bike(0, Grid.HEIGHT / 2, Color.BLUE, Bike.Direction.RIGHT);
-    private List<Bike> bikes = new ArrayList<>();
+    private BaseBike player1Bike = new PlayerBike(1, Grid.HEIGHT / 2, Color.BLUE, BaseBike.Direction.RIGHT);
+    private BaseBike cmp1Bike = new CmpBike(Grid.WIDTH - 1, Grid.HEIGHT / 2, Color.RED, BaseBike.Direction.LEFT);
+    private List<BaseBike> bikes = new ArrayList<>();
 
 
     public GameEngine(Canvas canvas) {
         this.canvas = canvas;
         this.gc = canvas.getGraphicsContext2D();
-        bikes.add(bike1);
+        bikes.add(player1Bike);
+        bikes.add(cmp1Bike);
     }
 
     public void gameLoop() {
@@ -45,9 +48,14 @@ public class GameEngine {
     }
 
     private void updateGame() {
-        bikes.forEach(bike -> bike.update());
+        List<Point> allTrails = bikes
+                .stream()
+                .flatMap(baseBike -> baseBike.getTrail().stream())
+                .collect(Collectors.toList());
 
-        if(bikes.stream().allMatch(Bike::isDead)) {
+        bikes.forEach(bike -> bike.update(allTrails));
+
+        if(bikes.stream().allMatch(BaseBike::isDead)) {
             stopGame();
         }
     }
@@ -71,7 +79,7 @@ public class GameEngine {
         if(event.getCode() == KeyCode.SPACE) {
             isPaused = !isPaused;
         }else if(event.getCode().isArrowKey()) {
-            bike1.setDirection(Bike.Direction.fromKeyCode(event.getCode()));
+            player1Bike.setDirection(BaseBike.Direction.fromKeyCode(event.getCode()));
         }
     }
 }
