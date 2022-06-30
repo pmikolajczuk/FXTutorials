@@ -40,7 +40,7 @@ public class GameEngine {
             }
 
             try {
-                Thread.sleep(10);
+                Thread.sleep(50);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -48,12 +48,13 @@ public class GameEngine {
     }
 
     private void updateGame() {
+        bikes.forEach(BaseBike::update);
+
         List<Point> allTrails = bikes
                 .stream()
                 .flatMap(baseBike -> baseBike.getTrail().stream())
                 .collect(Collectors.toList());
-
-        bikes.forEach(bike -> bike.update(allTrails));
+        bikes.forEach(bike -> bike.checkForCollision(allTrails));
 
         if(bikes.stream().allMatch(BaseBike::isDead)) {
             stopGame();

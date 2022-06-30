@@ -5,7 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import java.util.Objects;
 
 public class Point {
-    public static final int SIZE = 1;
+    public static final int SIZE = 5;
     private final int x;
     private final int y;
 

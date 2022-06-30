@@ -11,7 +11,6 @@ public class BaseBike {
     protected Color color;
     protected int posX;
     protected int posY;
-    protected int speed = 1;
     protected List<Point> trail = new LinkedList<>();
     protected Direction direction;
     protected boolean isDead = false;
@@ -23,7 +22,7 @@ public class BaseBike {
         this.direction = direction;
     }
 
-    public List<Point> getTrail () {
+    public List<Point> getTrail() {
         return trail;
     }
 
@@ -38,18 +37,25 @@ public class BaseBike {
     public void render(GraphicsContext gc) {
         gc.setFill(color);
         trail.forEach(point -> point.render(gc));
-        gc.fillRect(posX, posY, 1, 1);
+        gc.fillRect(posX, posY, Point.SIZE, Point.SIZE);
     }
 
-    public void update(List<Point> allTrails) {
+    public void update() {
         if (isDead) {
             return;
         }
 
         trail.add(new Point(posX, posY));
+
+    }
+
+    public void checkForCollision(List<Point> allTrails) {
+        if(isDead) {
+            return;
+        }
         calculateNewPosition();
 
-        if(isColliding(posX, posY, allTrails)) {
+        if (isColliding(posX, posY, allTrails)) {
             isDead = true;
         }
     }
@@ -57,28 +63,36 @@ public class BaseBike {
     protected void calculateNewPosition() {
         switch (direction) {
             case UP:
-                posY -= speed;
+                posY -= Point.SIZE;
                 break;
             case DOWN:
-                posY += speed;
+                posY += Point.SIZE;
                 break;
             case LEFT:
-                posX -= speed;
+                posX -= Point.SIZE;
                 break;
             case RIGHT:
-                posX += speed;
+                posX += Point.SIZE;
                 break;
         }
     }
 
     protected boolean isColliding(int posX, int posY, List<Point> allTrails) {
-        if (posX == 0 || posX == Grid.WIDTH || posY == 0 || posY == Grid.HEIGHT) {
+        if (posX == 0 || posX == Grid.WIDTH - Point.SIZE || posY == 0 || posY == Grid.HEIGHT - Point.SIZE) {
             return true;
         } else if (allTrails.contains(new Point(posX, posY))) {
             return true;
         }
         return false;
     }
+
+//    private boolean isCollidingWithTrails(int posX, int posY, List<Point> allTrails) {
+//        for(Point point : allTrails) {
+//            if(posX)
+//        }
+//
+//        return false;
+//    }
 
     public enum Direction {
         UP, DOWN, LEFT, RIGHT;
