@@ -8,13 +8,13 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class BaseBike {
-    private Color color;
-    private int posX;
-    private int posY;
-    private int speed = 1;
-    private List<Point> trail = new LinkedList<>();
-    private PlayerBike.Direction direction;
-    private boolean isDead = false;
+    protected Color color;
+    protected int posX;
+    protected int posY;
+    protected int speed = 1;
+    protected List<Point> trail = new LinkedList<>();
+    protected Direction direction;
+    protected boolean isDead = false;
 
     public BaseBike(int posX, int posY, Color color, PlayerBike.Direction direction) {
         this.posX = posX;
@@ -47,6 +47,14 @@ public class BaseBike {
         }
 
         trail.add(new Point(posX, posY));
+        calculateNewPosition();
+
+        if(isColliding(posX, posY, allTrails)) {
+            isDead = true;
+        }
+    }
+
+    protected void calculateNewPosition() {
         switch (direction) {
             case UP:
                 posY -= speed;
@@ -61,15 +69,15 @@ public class BaseBike {
                 posX += speed;
                 break;
         }
-        checkCollision(allTrails);
     }
 
-    public void checkCollision(List<Point> allTrails) {
+    protected boolean isColliding(int posX, int posY, List<Point> allTrails) {
         if (posX == 0 || posX == Grid.WIDTH || posY == 0 || posY == Grid.HEIGHT) {
-            isDead = true;
+            return true;
         } else if (allTrails.contains(new Point(posX, posY))) {
-            isDead = true;
+            return true;
         }
+        return false;
     }
 
     public enum Direction {

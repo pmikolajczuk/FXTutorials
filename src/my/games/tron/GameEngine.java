@@ -18,8 +18,8 @@ public class GameEngine {
     private volatile boolean isPaused = false;
 
     private Grid grid = new Grid();
-    private BaseBike player1Bike = new PlayerBike(1, Grid.HEIGHT / 2, Color.BLUE, BaseBike.Direction.RIGHT);
-    private BaseBike cmp1Bike = new CmpBike(Grid.WIDTH - 1, Grid.HEIGHT / 2, Color.RED, BaseBike.Direction.LEFT);
+    private BaseBike player1Bike = new PlayerBike(Point.SIZE, Grid.HEIGHT / 2, Color.BLUE, BaseBike.Direction.RIGHT);
+    private BaseBike cmp1Bike = new CmpBike(Grid.WIDTH - Point.SIZE, Grid.HEIGHT / 2, Color.RED, BaseBike.Direction.LEFT);
     private List<BaseBike> bikes = new ArrayList<>();
 
 
@@ -67,7 +67,6 @@ public class GameEngine {
 
     public void startGame() {
         isRunning = true;
-        //grid.render(gc);
         new Thread(() -> gameLoop()).start();
     }
 

@@ -5,8 +5,9 @@ import javafx.scene.canvas.GraphicsContext;
 import java.util.Objects;
 
 public class Point {
-    private int x;
-    private int y;
+    public static final int SIZE = 1;
+    private final int x;
+    private final int y;
 
     public Point(int x, int y) {
         this.x = x;
@@ -14,7 +15,7 @@ public class Point {
     }
 
     public void render(GraphicsContext gc) {
-        gc.fillRect(x, y, 1,1);
+        gc.fillRect(x, y, SIZE,SIZE);
     }
 
     @Override
