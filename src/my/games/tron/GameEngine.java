@@ -48,13 +48,12 @@ public class GameEngine {
     }
 
     private void updateGame() {
-        bikes.forEach(BaseBike::update);
 
         List<Point> allTrails = bikes
                 .stream()
                 .flatMap(baseBike -> baseBike.getTrail().stream())
                 .collect(Collectors.toList());
-        bikes.forEach(bike -> bike.checkForCollision(allTrails));
+        bikes.forEach(bike -> bike.update(allTrails));
 
         if(bikes.stream().allMatch(BaseBike::isDead)) {
             stopGame();

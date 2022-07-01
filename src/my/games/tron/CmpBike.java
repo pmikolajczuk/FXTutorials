@@ -12,13 +12,16 @@ public class CmpBike extends BaseBike{
     }
 
     @Override
-    public void checkForCollision(List<Point> allTrails) {
+    public void update(List<Point> allTrails) {
         if(isDead) {
             return;
         }
 
         try{
             avoidCollision(posX, posY, allTrails);
+            Point newTrailPoint = new Point(posX, posY);
+            trail.add(newTrailPoint);
+            allTrails.add(newTrailPoint);
         }catch (StackOverflowError e) {
             isDead = true;
         }

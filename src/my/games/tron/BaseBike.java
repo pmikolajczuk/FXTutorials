@@ -40,16 +40,7 @@ public class BaseBike {
         gc.fillRect(posX, posY, Point.SIZE, Point.SIZE);
     }
 
-    public void update() {
-        if (isDead) {
-            return;
-        }
-
-        trail.add(new Point(posX, posY));
-
-    }
-
-    public void checkForCollision(List<Point> allTrails) {
+    public void update(List<Point> allTrails) {
         if(isDead) {
             return;
         }
@@ -57,6 +48,10 @@ public class BaseBike {
 
         if (isColliding(posX, posY, allTrails)) {
             isDead = true;
+        } else {
+            Point newTrailPoint = new Point(posX, posY);
+            trail.add(newTrailPoint);
+            allTrails.add(newTrailPoint);
         }
     }
 
