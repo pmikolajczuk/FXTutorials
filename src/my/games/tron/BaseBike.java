@@ -6,8 +6,9 @@ import javafx.scene.paint.Color;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
-public class BaseBike {
+public abstract class BaseBike {
     protected Color color;
     protected int posX;
     protected int posY;
@@ -40,20 +41,7 @@ public class BaseBike {
         gc.fillRect(posX, posY, Point.SIZE, Point.SIZE);
     }
 
-    public void update(List<Point> allTrails) {
-        if(isDead) {
-            return;
-        }
-        calculateNewPosition();
-
-        if (isColliding(posX, posY, allTrails)) {
-            isDead = true;
-        } else {
-            Point newTrailPoint = new Point(posX, posY);
-            trail.add(newTrailPoint);
-            allTrails.add(newTrailPoint);
-        }
-    }
+    public abstract void update(List<Point> allTrails);
 
     protected void calculateNewPosition() {
         switch (direction) {
@@ -92,8 +80,23 @@ public class BaseBike {
     public enum Direction {
         UP, DOWN, LEFT, RIGHT;
 
-        public static Direction fromKeyCode(KeyCode keyCode) {
+        public static Direction fromArrowKeyCode(KeyCode keyCode) {
             return Direction.valueOf(keyCode.name());
+        }
+
+        public static Optional<Direction> fromLetterKeyCode(KeyCode keyCode) {
+            switch (keyCode) {
+                case W:
+                    return Optional.of(UP);
+                case S:
+                    return Optional.of(DOWN);
+                case A:
+                    return Optional.of(LEFT);
+                case D:
+                    return Optional.of(RIGHT);
+                default:
+                    return Optional.ofNullable(null);
+            }
         }
     }
 }

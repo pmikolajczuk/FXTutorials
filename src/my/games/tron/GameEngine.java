@@ -9,7 +9,10 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static my.games.tron.BaseBike.Direction;
 
 public class GameEngine {
     private Canvas canvas;
@@ -18,8 +21,9 @@ public class GameEngine {
     private volatile boolean isPaused = false;
 
     private Grid grid = new Grid();
-    private BaseBike player1Bike = new PlayerBike(Point.SIZE, Grid.HEIGHT / 2, Color.BLUE, BaseBike.Direction.RIGHT);
-    private BaseBike cmp1Bike = new CmpBike(Grid.WIDTH - Point.SIZE, Grid.HEIGHT / 2, Color.RED, BaseBike.Direction.LEFT);
+    private BaseBike player1Bike = new PlayerBike(Grid.WIDTH - Point.SIZE, Grid.HEIGHT / 2, Color.BLUE, BaseBike.Direction.LEFT);
+    //private BaseBike player2Bike = new PlayerBike(0, Grid.HEIGHT / 2, Color.RED, BaseBike.Direction.RIGHT);
+    private BaseBike cmp1Bike = new CmpBike(Point.SIZE, Grid.HEIGHT / 2, Color.RED, BaseBike.Direction.RIGHT);
     private List<BaseBike> bikes = new ArrayList<>();
 
 
@@ -28,6 +32,7 @@ public class GameEngine {
         this.gc = canvas.getGraphicsContext2D();
         bikes.add(player1Bike);
         bikes.add(cmp1Bike);
+        //bikes.add(player2Bike);
     }
 
     public void gameLoop() {
@@ -78,7 +83,10 @@ public class GameEngine {
         if(event.getCode() == KeyCode.SPACE) {
             isPaused = !isPaused;
         }else if(event.getCode().isArrowKey()) {
-            player1Bike.setDirection(BaseBike.Direction.fromKeyCode(event.getCode()));
+            player1Bike.setDirection(Direction.fromArrowKeyCode(event.getCode()));
+        }else if(event.getCode().isLetterKey()) {
+            Optional<Direction> direction = Direction.fromLetterKeyCode(event.getCode());
+            //direction.ifPresent(direction1 -> player2Bike.setDirection(direction1));
         }
     }
 }
