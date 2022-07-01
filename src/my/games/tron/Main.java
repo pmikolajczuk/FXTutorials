@@ -11,6 +11,8 @@ import javafx.stage.Stage;
 public class Main extends Application {
     private GameEngine engine;
     private Canvas canvas;
+    private StartScreen startScreen = new StartScreen();
+    private boolean isStartScreen = false;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -29,7 +31,7 @@ public class Main extends Application {
         primaryStage.setOnCloseRequest(event -> engine.stopGame());
         primaryStage.show();
         initializeControls();
-        engine.startGame();
+        displayStartScreen();
     }
 
     public static void main(String[] args){
@@ -40,9 +42,20 @@ public class Main extends Application {
         canvas.setOnKeyPressed(event -> handleKeyPressedEvent(event));
     }
 
+    public void displayStartScreen() {
+        isStartScreen = true;
+        startScreen.render(canvas.getGraphicsContext2D());
+    }
+
     private void handleKeyPressedEvent(KeyEvent event) {
         if(event.getCode() == KeyCode.ENTER){
             restart();
+        } else if(isStartScreen && event.getCode() == KeyCode.DIGIT1) {
+            isStartScreen = false;
+            engine.startGame(true);
+        } else if(isStartScreen && event.getCode() == KeyCode.DIGIT2) {
+            isStartScreen = false;
+            engine.startGame(false);
         } else {
             engine.handleKeyPressedEvent(event);
         }
@@ -52,6 +65,6 @@ public class Main extends Application {
         //restart
         engine.stopGame();
         engine = new GameEngine(canvas);
-        engine.startGame();
+        displayStartScreen();
     }
 }

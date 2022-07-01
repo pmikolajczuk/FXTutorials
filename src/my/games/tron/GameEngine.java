@@ -21,18 +21,25 @@ public class GameEngine {
     private volatile boolean isPaused = false;
 
     private Grid grid = new Grid();
+    private boolean singlePlayer = true;
     private BaseBike player1Bike = new PlayerBike(Grid.WIDTH - Point.SIZE, Grid.HEIGHT / 2, Color.BLUE, BaseBike.Direction.LEFT);
-    //private BaseBike player2Bike = new PlayerBike(0, Grid.HEIGHT / 2, Color.RED, BaseBike.Direction.RIGHT);
+    private BaseBike player2Bike = new PlayerBike(0, Grid.HEIGHT / 2, Color.RED, BaseBike.Direction.RIGHT);
     private BaseBike cmp1Bike = new CmpBike(0, Grid.HEIGHT / 2, Color.RED, BaseBike.Direction.RIGHT);
     private List<BaseBike> bikes = new ArrayList<>();
-
 
     public GameEngine(Canvas canvas) {
         this.canvas = canvas;
         this.gc = canvas.getGraphicsContext2D();
+    }
+
+    public void initBikes() {
         bikes.add(player1Bike);
-        bikes.add(cmp1Bike);
-        //bikes.add(player2Bike);
+        if(singlePlayer) {
+            bikes.add(cmp1Bike);
+        }else {
+            //multiplayer
+            bikes.add(player2Bike);
+        }
     }
 
     public void gameLoop() {
@@ -70,7 +77,10 @@ public class GameEngine {
         bikes.forEach(bike -> bike.render(gc));
     }
 
-    public void startGame() {
+    public void startGame(boolean singlePlayer) {
+        this.singlePlayer = singlePlayer;
+
+        initBikes();
         isRunning = true;
         new Thread(() -> gameLoop()).start();
     }
@@ -84,9 +94,9 @@ public class GameEngine {
             isPaused = !isPaused;
         }else if(event.getCode().isArrowKey()) {
             player1Bike.setDirection(Direction.fromArrowKeyCode(event.getCode()));
-        }else if(event.getCode().isLetterKey()) {
+        }else if(!singlePlayer && event.getCode().isLetterKey()) {
             Optional<Direction> direction = Direction.fromLetterKeyCode(event.getCode());
-            //direction.ifPresent(direction1 -> player2Bike.setDirection(direction1));
+            direction.ifPresent(direction1 -> player2Bike.setDirection(direction1));
         }
     }
 }

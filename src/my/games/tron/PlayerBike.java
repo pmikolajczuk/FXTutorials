@@ -22,7 +22,7 @@ public class PlayerBike extends BaseBike{
         }else {
             Point newTrailPoint = new Point(posX, posY);
             trail.add(newTrailPoint);
-            allTrails.add(newTrailPoint);;
+            allTrails.add(newTrailPoint);
 
         }
     }
