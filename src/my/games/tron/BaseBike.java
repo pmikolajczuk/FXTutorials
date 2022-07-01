@@ -21,6 +21,8 @@ public abstract class BaseBike {
         this.posY = posY;
         this.color = color;
         this.direction = direction;
+
+        trail.add(new Point(posX,posY));
     }
 
     public List<Point> getTrail() {
@@ -68,14 +70,6 @@ public abstract class BaseBike {
         }
         return false;
     }
-
-//    private boolean isCollidingWithTrails(int posX, int posY, List<Point> allTrails) {
-//        for(Point point : allTrails) {
-//            if(posX)
-//        }
-//
-//        return false;
-//    }
 
     public enum Direction {
         UP, DOWN, LEFT, RIGHT;

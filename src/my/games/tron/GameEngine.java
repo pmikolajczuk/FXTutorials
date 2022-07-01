@@ -23,7 +23,7 @@ public class GameEngine {
     private Grid grid = new Grid();
     private BaseBike player1Bike = new PlayerBike(Grid.WIDTH - Point.SIZE, Grid.HEIGHT / 2, Color.BLUE, BaseBike.Direction.LEFT);
     //private BaseBike player2Bike = new PlayerBike(0, Grid.HEIGHT / 2, Color.RED, BaseBike.Direction.RIGHT);
-    private BaseBike cmp1Bike = new CmpBike(Point.SIZE, Grid.HEIGHT / 2, Color.RED, BaseBike.Direction.RIGHT);
+    private BaseBike cmp1Bike = new CmpBike(0, Grid.HEIGHT / 2, Color.RED, BaseBike.Direction.RIGHT);
     private List<BaseBike> bikes = new ArrayList<>();
 
 
