@@ -12,4 +12,10 @@ public class Grid {
         gc.setFill(COLOR);
         gc.fillRect(0,0, WIDTH, HEIGHT);
     }
+
+    public void displayGameOverMessage(GraphicsContext gc, String winner) {
+        gc.setFill(Color.WHITE);
+        gc.fillText("GAME OVER!", Grid.WIDTH / 2 - 30, Grid.HEIGHT / 5);
+        gc.fillText(winner + " won.", Grid.WIDTH / 2 - 30, Grid.HEIGHT / 5 + 30);
+    }
 }

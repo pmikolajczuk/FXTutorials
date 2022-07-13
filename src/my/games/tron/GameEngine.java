@@ -60,6 +60,9 @@ public class GameEngine {
     }
 
     private void updateGame() {
+        if(isGameOver()) {
+            stopGame();
+        }
 
         List<Point> allTrails = bikes
                 .stream()
@@ -67,14 +70,44 @@ public class GameEngine {
                 .collect(Collectors.toList());
         bikes.forEach(bike -> bike.update(allTrails));
 
-        if(bikes.stream().allMatch(BaseBike::isDead)) {
-            stopGame();
-        }
+//        if(bikes.stream().allMatch(BaseBike::isDead)) {
+//            stopGame();
+//        }
+    }
+
+    private boolean isGameOver() {
+        return bikes.stream().anyMatch(BaseBike::isDead);
     }
 
     private void displayGame() {
         grid.render(gc);
         bikes.forEach(bike -> bike.render(gc));
+
+        if(isGameOver()) {
+            displayGameOverMessage();
+        }
+    }
+
+    private void displayGameOverMessage() {
+        String winner = determineWinner();
+        grid.displayGameOverMessage(gc, winner);
+    }
+
+    private String determineWinner() {
+        if(singlePlayer) {
+            if(player1Bike.isDead) {
+                return "CMP Player";
+            }else {
+                return "Player 1";
+            }
+        }else {
+            //multiplayer
+            if(player1Bike.isDead) {
+                return "Player 2";
+            }else {
+                return "Player 1";
+            }
+        }
     }
 
     public void startGame(boolean singlePlayer) {
