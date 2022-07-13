@@ -22,7 +22,7 @@ public abstract class BaseBike {
         this.color = color;
         this.direction = direction;
 
-        trail.add(new Point(posX,posY));
+        trail.add(new Point(posX, posY));
     }
 
     public List<Point> getTrail() {
@@ -34,7 +34,9 @@ public abstract class BaseBike {
     }
 
     public void setDirection(PlayerBike.Direction direction) {
-        this.direction = direction;
+        if (!this.direction.isOpposite(direction)) {
+            this.direction = direction;
+        }
     }
 
     public void render(GraphicsContext gc) {
@@ -73,6 +75,19 @@ public abstract class BaseBike {
 
     public enum Direction {
         UP, DOWN, LEFT, RIGHT;
+
+        static {
+            UP.opposite = DOWN;
+            DOWN.opposite = UP;
+            LEFT.opposite = RIGHT;
+            RIGHT.opposite = LEFT;
+        }
+
+        private Direction opposite;
+
+        private boolean isOpposite(Direction direction) {
+            return opposite == direction;
+        }
 
         public static Direction fromArrowKeyCode(KeyCode keyCode) {
             return Direction.valueOf(keyCode.name());
