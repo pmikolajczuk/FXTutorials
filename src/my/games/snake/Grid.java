@@ -8,7 +8,6 @@ import java.util.List;
 
 public class Grid {
     public static final Color COLOR = Color.BLACK;
-    //public static final Color SCORE_COLOR = Color.AQUA;
     public static final int PIXEL_WIDTH = 800;
     public static final int PIXEL_HEIGHT = 600;
     public static final int POINT_SIZE = 20;

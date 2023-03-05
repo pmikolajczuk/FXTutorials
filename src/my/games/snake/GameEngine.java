@@ -15,16 +15,14 @@ public class GameEngine {
     public static final int NO_OF_CMP_SNAKES = 2;
     public static final int NO_OF_APPLES = 2;
 
-    private Canvas canvas;
-    private GraphicsContext gc;
+    private final Canvas canvas;
+    private final GraphicsContext gc;
     private volatile boolean isRunning = false;
     private volatile boolean isPaused = false;
 
-    private Grid grid = new Grid();
-    private List<Snake> snakes = new ArrayList<>();
-    private List<Apple> apples = new ArrayList<>();
-
-    private List<Runnable> tasks = new ArrayList<>();
+    private final Grid grid = new Grid();
+    private final List<Snake> snakes = new ArrayList<>();
+    private final List<Apple> apples = new ArrayList<>();
 
     public GameEngine(Canvas canvas) {
         this.canvas = canvas;
@@ -32,9 +30,9 @@ public class GameEngine {
 
         //this.snakes.add(new BaseSnake(10, 20, Color.CORNSILK));
 
-        int rows = 4;
+        int columns = 4;
         for (int i = 0; i < NO_OF_CMP_SNAKES; i++) {
-            this.snakes.add(new CmpSnake((i % rows + 1) * 8, (i / rows + 1) * 6,
+            this.snakes.add(new CmpSnake((i % columns + 1) * 8, (i / columns + 1) * 6,
                     new Color(Math.random(), Math.random(), Math.random(), 1)));
         }
 
@@ -51,17 +49,11 @@ public class GameEngine {
         isRunning = false;
     }
 
-    public synchronized void addTask(Runnable runnable) {
-        tasks.add(runnable);
-    }
-
     private void gameLoop() {
         isRunning = true;
         while (isRunning) {
-            //processTasks();
             if (!isPaused) {
                 Platform.runLater(() -> {
-                    //if(isPaused) {return};
                     updateGame();
                     displayGame();
                 });
@@ -100,11 +92,6 @@ public class GameEngine {
         grid.render(gc);
         apples.forEach(apple -> apple.render(gc));
         snakes.forEach(snake -> snake.render(gc));
-    }
-
-    private synchronized void processTasks() {
-        tasks.forEach(runnable -> runnable.run());
-        tasks.clear();
     }
 
     public void processInput(KeyEvent event) {

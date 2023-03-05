@@ -7,7 +7,7 @@ import javafx.scene.paint.Color;
 import java.util.List;
 
 public interface Snake {
-    public static int START_LENGTH = 5;
+    int START_LENGTH = 5;
 
     void update(List<Apple> apples, List<Point> obstacles);
 
@@ -25,7 +25,7 @@ public interface Snake {
         return getBody().size() - START_LENGTH;
     }
 
-    public enum Direction {
+    enum Direction {
         LEFT,
         DOWN,
         RIGHT,

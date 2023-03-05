@@ -3,17 +3,16 @@ package my.games.snake;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class BaseSnake implements Snake {
-    Point head;
-    LinkedList<Point> tail;
-    int velocity = 1;
-    volatile Direction direction = Direction.RIGHT;
-    boolean isDead = false;
+    protected Point head;
+    protected LinkedList<Point> tail;
+    protected int velocity = 1;
+    protected volatile Direction direction = Direction.RIGHT;
+    protected boolean isDead = false;
 
     public BaseSnake(int startX, int startY, Color color) {
         head = new Point(startX, startY, color);
@@ -112,7 +111,6 @@ public class BaseSnake implements Snake {
     }
 
     private void updateTail(boolean appleEaten) {
-        //tail.addFirst(new Point(head.getX(), head.getY(), head.getColor()));
         tail.addFirst(head);
         if (appleEaten) {
             //skip removal of last element, snake will grow one element

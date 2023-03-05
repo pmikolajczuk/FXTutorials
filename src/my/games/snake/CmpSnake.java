@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class CmpSnake implements Snake {
 
-    private BaseSnake snake;
+    private final BaseSnake snake;
 
     public CmpSnake(int startX, int startY, Color color) {
         snake = new BaseSnake(startX, startY, color);
@@ -180,8 +180,8 @@ public class CmpSnake implements Snake {
     }
 
     private boolean isColliding(Point point, List<Point> obstacles) {
-        for (int i = 0; i < obstacles.size(); i++) {
-            if (point.equals(obstacles.get(i)) && point != obstacles.get(i)) {
+        for (Point obstacle : obstacles) {
+            if (point.equals(obstacle) && point != obstacle) {
                 return true;
             }
         }
