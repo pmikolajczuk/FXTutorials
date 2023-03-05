@@ -15,14 +15,22 @@ public class Brick {
         this.posY = posY;
     }
 
+    public int getPosX() {
+        return posX;
+    }
+
+    public int getPosY() {
+        return posY;
+    }
+
     public void render(GraphicsContext gc) {
         gc.setFill(COLOR);
         gc.fillRect(posX, posY, SIZE, SIZE);
     }
 
     public void move(int moveX, int moveY) {
-        posX += moveX;
-        posY += moveY;
+        posX += moveX * Brick.SIZE;
+        posY += moveY * Brick.SIZE;
     }
 
 }

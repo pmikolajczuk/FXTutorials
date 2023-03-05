@@ -10,9 +10,11 @@ public class GameEngine {
     private GraphicsContext gc;
     private volatile boolean isRunning = false;
     private volatile boolean isPaused = false;
+    private long lastUpdateTime = 0L;
 
-    private Grid grid = new Grid();
-    private Block currentBlock = new Block();
+    private final Grid grid = new Grid();
+    private final Bottom bottom = new Bottom();
+    private Block currentBlock = Block.createNewBlock();
 
     public GameEngine(Canvas canvas) {
         this.canvas = canvas;
@@ -21,7 +23,7 @@ public class GameEngine {
 
     public void gameLoop() {
         while (isRunning) {
-            if(!isPaused) {
+            if (!isPaused) {
                 Platform.runLater(() -> {
                     updateGame();
                     displayGame();
@@ -29,7 +31,7 @@ public class GameEngine {
             }
 
             try {
-                Thread.sleep(500);
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -37,11 +39,27 @@ public class GameEngine {
     }
 
     private void updateGame() {
-        currentBlock.move(0, Brick.SIZE);
+        if (System.currentTimeMillis() - lastUpdateTime > 500) {
+            doUpdateGame();
+            lastUpdateTime = System.currentTimeMillis();
+        }
+    }
+
+    private void doUpdateGame() {
+        moveCurrentBlock(0, 1);
+    }
+
+    private void moveCurrentBlock(int moveX, int moveY) {
+        currentBlock.move(moveX, moveY);
+        if (bottom.isBlockColliding(currentBlock)) {
+            bottom.addBlock(currentBlock);
+            currentBlock = Block.createNewBlock();
+        }
     }
 
     private void displayGame() {
         grid.render(gc);
+        bottom.render(gc);
         currentBlock.render(gc);
     }
 
@@ -56,6 +74,16 @@ public class GameEngine {
 
     public void handleKeyPressedEvent(KeyEvent event) {
         switch (event.getCode()) {
+            case LEFT:
+                moveCurrentBlock(-1, 0);
+                break;
+            case RIGHT:
+                moveCurrentBlock(1, 0);
+                break;
+            case DOWN:
+                moveCurrentBlock(0, 1);
+            default:
+                break;
         }
     }
 }

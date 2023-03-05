@@ -2,14 +2,29 @@ package my.games.tetris;
 
 import javafx.scene.canvas.GraphicsContext;
 
+import java.util.Collections;
+import java.util.List;
+
 public class Block {
-    private Brick brick = new Brick(100, 100);
+    private final List<Brick> bricks = Collections.singletonList(new Brick(100, 100));
+
+    private Block() {
+
+    }
+
+    public static Block createNewBlock() {
+        return new Block();
+    }
+
+    public List<Brick> getBricks() {
+        return bricks;
+    }
 
     public void render(GraphicsContext gc) {
-        brick.render(gc);
+        bricks.forEach(brick -> brick.render(gc));
     }
 
     public void move(int moveX, int moveY) {
-        brick.move(moveX, moveY);
+        bricks.forEach(brick -> brick.move(moveX, moveY));
     }
 }
