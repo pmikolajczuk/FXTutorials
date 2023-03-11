@@ -23,6 +23,14 @@ public class Brick {
         return posY;
     }
 
+    public int getRightEdgeX() {
+        return posX + SIZE;
+    }
+
+    public int getBottomEdgeY() {
+        return posY + SIZE;
+    }
+
     public void render(GraphicsContext gc) {
         gc.setFill(COLOR);
         gc.fillRect(posX, posY, SIZE, SIZE);
@@ -31,6 +39,36 @@ public class Brick {
     public void move(int moveX, int moveY) {
         posX += moveX * Brick.SIZE;
         posY += moveY * Brick.SIZE;
+    }
+
+    public boolean isMoveColliding(int moveX, int moveY, Bottom bottom) {
+        int newPosX = posX + moveX * Brick.SIZE;
+        if (isNewPosCollidingWithWall(newPosX) || isNewPosCollidingWithBottom(newPosX, bottom)) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isNewPosCollidingWithWall(int newPosX) {
+        return newPosX < 0 || newPosX + Brick.SIZE > Grid.WIDTH;
+    }
+
+    private boolean isNewPosCollidingWithBottom(int newPosX, Bottom bottom) {
+        return bottom.getBricks().stream().anyMatch(brick -> isNewPosCollidingX(newPosX, brick));
+    }
+
+    private boolean isNewPosCollidingX(int newPosX, Brick brick) {
+        if (this.posY == brick.posY && newPosX == brick.posX) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isCollidingY(Brick brick) {
+        if (this.posX == brick.posX && (this.getBottomEdgeY() == brick.posY || this.getPosY() == brick.getBottomEdgeY())) {
+            return true;
+        }
+        return false;
     }
 
 }

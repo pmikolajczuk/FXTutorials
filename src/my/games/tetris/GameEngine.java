@@ -50,7 +50,7 @@ public class GameEngine {
     }
 
     private void moveCurrentBlock(int moveX, int moveY) {
-        currentBlock.move(moveX, moveY);
+        currentBlock.move(moveX, moveY, bottom);
         if (bottom.isBlockColliding(currentBlock)) {
             bottom.addBlock(currentBlock);
             currentBlock = Block.createNewBlock();

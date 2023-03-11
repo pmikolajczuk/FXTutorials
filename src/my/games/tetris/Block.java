@@ -24,7 +24,9 @@ public class Block {
         bricks.forEach(brick -> brick.render(gc));
     }
 
-    public void move(int moveX, int moveY) {
-        bricks.forEach(brick -> brick.move(moveX, moveY));
+    public void move(int moveX, int moveY, Bottom bottom) {
+        if (bricks.stream().noneMatch(brick -> brick.isMoveColliding(moveX, moveY, bottom))) {
+            bricks.forEach(brick -> brick.move(moveX, moveY));
+        }
     }
 }
