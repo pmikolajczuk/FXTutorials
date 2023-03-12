@@ -4,6 +4,8 @@ import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyEvent;
+import my.games.tetris.blocks.Block;
+import my.games.tetris.blocks.BlockFactory;
 
 public class GameEngine {
     private Canvas canvas;
@@ -14,7 +16,7 @@ public class GameEngine {
 
     private final Grid grid = new Grid();
     private final Bottom bottom = new Bottom();
-    private Block currentBlock = Block.createNewBlock();
+    private Block currentBlock = BlockFactory.createNewBlock();
 
     public GameEngine(Canvas canvas) {
         this.canvas = canvas;
@@ -53,7 +55,7 @@ public class GameEngine {
         currentBlock.move(moveX, moveY, bottom);
         if (bottom.isBlockColliding(currentBlock)) {
             bottom.addBlock(currentBlock);
-            currentBlock = Block.createNewBlock();
+            currentBlock = BlockFactory.createNewBlock();
         }
     }
 

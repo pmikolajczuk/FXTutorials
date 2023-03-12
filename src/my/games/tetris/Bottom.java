@@ -1,13 +1,13 @@
 package my.games.tetris;
 
 import javafx.scene.canvas.GraphicsContext;
+import my.games.tetris.blocks.Block;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Bottom {
-    private static final int POSITION = Grid.HEIGHT;
     private final List<Brick> bricks = new ArrayList<>();
 
     public List<Brick> getBricks() {
@@ -58,11 +58,18 @@ public class Bottom {
     }
 
     private boolean isBrickColliding(Brick brick) {
-        if(brick.getPosY() + Brick.SIZE >= POSITION) {
+        if(brick.getPosY() + Brick.SIZE >= Grid.HEIGHT) {
             return true;
         }
         return bricks.stream()
-                .anyMatch(brick::isCollidingY);
+                .anyMatch(bottomBrick -> isBrickCollidingWithBottomBrick(brick, bottomBrick));
+    }
+
+    private boolean isBrickCollidingWithBottomBrick(Brick brick, Brick bottomBrick) {
+        if (brick.getPosX() == bottomBrick.getPosX() && brick.getBottomEdgeY() == bottomBrick.getPosY()) {
+            return true;
+        }
+        return false;
     }
 
     public void render(GraphicsContext gc) {

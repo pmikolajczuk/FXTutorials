@@ -63,12 +63,4 @@ public class Brick {
         }
         return false;
     }
-
-    public boolean isCollidingY(Brick brick) {
-        if (this.posX == brick.posX && (this.getBottomEdgeY() == brick.posY || this.getPosY() == brick.getBottomEdgeY())) {
-            return true;
-        }
-        return false;
-    }
-
 }
